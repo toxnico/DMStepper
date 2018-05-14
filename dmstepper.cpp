@@ -1,4 +1,5 @@
 #include "dmstepper.h"
+#include "speedfunctions.h"
 
 /**
 * Constructor
@@ -7,33 +8,43 @@ DMStepper::DMStepper(int dirPin, int stepPin){
   _dirPin = dirPin;
   _stepPin = stepPin;
   pinMode(_dirPin, OUTPUT);
-  _oscillator = new DMOscillator(stepPin, OscillationMode::count);
+  pinMode(_stepPin, OUTPUT);
+  _timer = new DMTimer();
 }
 
-void DMStepper::run(signed char dir, unsigned long stepsToGo){
+void DMStepper::run(signed char dir, unsigned long stepsToGo, unsigned long speed){
   if(isRunning())
     return;
 
+  _maxSpeedForThisMove = speed;
+  _stepsAchievedForThisMove = 0;
+
   _direction = dir;
   digitalWrite(_dirPin, dir > 0 ? HIGH : LOW);
-  _oscillator->oscillateHz(speed, stepsToGo);
+
+  _isRunning = true;
 }
 
 bool DMStepper::update(){
-  bool updated = _oscillator->update();
 
-  if(updated)
-    currentPosition += _direction;
+  if(!_isRunning)
+    return false;
 
-  return updated;
-}
+  //adjust the speed according to acceleration and current step position
+  unsigned long speedHz = speedAtStep(_maxSpeedForThisMove, acceleration, _totalStepsForThisMove, _stepsAchievedForThisMove);
 
-//duration of the acceleration phase in ms
-unsigned long DMStepper::accelerationDuration(maxSpeed, acceleration){
-   return (maxSpeed*1000) / acceleration;
-}
+  unsigned long periodUs = 1000000 / speedHz;
 
-//number of steps during the acceleration phase
-unsigned long stepCountDuringAcceleration(maxSpeed, acceleration){
-  return (accelerationDuration(maxSpeed, acceleration) * maxSpeed)/2
+  if(!_timer->isTimeReached(micros(), periodUs))
+    return false;
+
+  //send step!
+  digitalWrite(_stepPin, HIGH);
+  digitalWrite(_stepPin, LOW);
+
+  _stepsAchievedForThisMove++;
+  if(_stepsAchievedForThisMove >= _totalStepsForThisMove)
+    _isRunning = false;
+
+  return true;
 }

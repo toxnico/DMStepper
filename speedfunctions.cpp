@@ -36,11 +36,8 @@ bool canAccelerateCompletely(unsigned long maxSpeed, unsigned long acceleration,
 
   return realAccelerationDistance == accelerationDistance;
 }
-/*
-unsigned long realMaxSpeed(unsigned long maxSpeed, unsigned long acceleration, unsigned long stepsToGo){
-  unsigned long accelerationDistance = accelerationStepCount(maxSpeed, acceleration);
-}
-*/
+
+//returns the speed at a given step
 unsigned long speedAtStep(unsigned long maxSpeed, unsigned long acceleration, unsigned long stepsToGo, unsigned long currentStep){
 
   if(currentStep == 0 || currentStep == stepsToGo)

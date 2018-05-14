@@ -7,7 +7,7 @@ DMStepper *motor = NULL;
 
 int dirPin = 22;
 int stepPin = 23;
-int stepsTotal = 1600;
+int stepsTotal = 40000;
 char direction = 1;
 
 void setup(){
@@ -17,6 +17,7 @@ void setup(){
   t = new DMTimer(1*1000000);
 
   motor = new DMStepper(dirPin, stepPin);
+  motor->acceleration = 6000;
 
   Serial.println("Go!");
 }
@@ -26,13 +27,13 @@ void loop(){
   //every second...
   if(t->isTimeReached()){
 
-    motor->speed = 6000;
-    motor->run(direction, stepsTotal);
+
+    motor->run(direction, stepsTotal, 6000);
 
     direction *= -1;
   }
 
   //update the motor
   motor->update();
-  
+
 }

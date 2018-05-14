@@ -1,7 +1,7 @@
 #ifndef DMSTEPPER_H
 #define DMSTEPPER_H
 
-#include <dmoscillator.h>
+#include <dmtimer.h>
 
 class DMStepper {
 private: //private members
@@ -9,7 +9,14 @@ private: //private members
   int _dirPin = 0;
   int _stepPin = 0;
   signed char _direction = 0;
-  DMOscillator *_oscillator;
+
+  //step counter for the current move
+  unsigned long _stepsAchievedForThisMove = 0;
+  unsigned long _totalStepsForThisMove = 0;
+
+  unsigned long _maxSpeedForThisMove = 0;
+
+  DMTimer *_timer;
 
 public: //public members
 
@@ -17,12 +24,12 @@ public: //public members
 
   unsigned long currentPosition = 0;
   char direction = 1;// 1 or -1
-  unsigned long speed = 0; //steps/s
+
   unsigned long acceleration = 1; //steps/s^2
 
   bool isRunning() { return _isRunning; }
 
-  void run(signed char dir, unsigned long stepsToGo);
+  void run(signed char dir, unsigned long stepsToGo, unsigned long speed);
 
   bool update();
 };
