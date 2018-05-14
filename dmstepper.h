@@ -27,6 +27,9 @@ public: //public members
 
   unsigned long acceleration = 1; //steps/s^2
 
+  unsigned long veryMaxSpeed = 13000; //steps/s^2
+  unsigned long veryMinSpeed = 300; //steps/s^2
+
   bool isRunning() { return _isRunning; }
 
   void run(signed char dir, unsigned long stepsToGo, unsigned long speed);

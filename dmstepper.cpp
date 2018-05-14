@@ -12,12 +12,13 @@ DMStepper::DMStepper(int dirPin, int stepPin){
   _timer = new DMTimer();
 }
 
-void DMStepper::run(signed char dir, unsigned long stepsToGo, unsigned long speed){
+void DMStepper::run(signed char dir, unsigned long speed, unsigned long stepsToGo){
   if(isRunning())
     return;
 
   _maxSpeedForThisMove = speed;
   _stepsAchievedForThisMove = 0;
+  _totalStepsForThisMove = stepsToGo;
 
   _direction = dir;
   digitalWrite(_dirPin, dir > 0 ? HIGH : LOW);
@@ -32,7 +33,10 @@ bool DMStepper::update(){
 
   //adjust the speed according to acceleration and current step position
   unsigned long speedHz = speedAtStep(_maxSpeedForThisMove, acceleration, _totalStepsForThisMove, _stepsAchievedForThisMove);
-
+  //if(speedHz < veryMinSpeed)
+  //  speedHz = veryMinSpeed;
+  if(speedHz > veryMaxSpeed)
+    speedHz = veryMaxSpeed;
   unsigned long periodUs = 1000000 / speedHz;
 
   if(!_timer->isTimeReached(micros(), periodUs))
@@ -43,6 +47,7 @@ bool DMStepper::update(){
   digitalWrite(_stepPin, LOW);
 
   _stepsAchievedForThisMove++;
+  //Serial.println(_stepsAchievedForThisMove, DEC);
   if(_stepsAchievedForThisMove >= _totalStepsForThisMove)
     _isRunning = false;
 
