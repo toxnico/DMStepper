@@ -27,3 +27,13 @@ bool DMStepper::update(){
 
   return updated;
 }
+
+//duration of the acceleration phase in ms
+unsigned long DMStepper::accelerationDuration(maxSpeed, acceleration){
+   return (maxSpeed*1000) / acceleration;
+}
+
+//number of steps during the acceleration phase
+unsigned long stepCountDuringAcceleration(maxSpeed, acceleration){
+  return (accelerationDuration(maxSpeed, acceleration) * maxSpeed)/2
+}

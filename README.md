@@ -1,5 +1,5 @@
 # DMStepper
-Stepper motor driver for Arduino
+Stepper motor driver for Arduino (currently in development, not packaged as library yet).
 
 ```C++
 //Create a motor, telling the direction and step pins

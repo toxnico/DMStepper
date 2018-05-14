@@ -18,6 +18,7 @@ public: //public members
   unsigned long currentPosition = 0;
   char direction = 1;// 1 or -1
   unsigned long speed = 0; //steps/s
+  unsigned long acceleration = 1; //steps/s^2
 
   bool isRunning() { return _isRunning; }
 
