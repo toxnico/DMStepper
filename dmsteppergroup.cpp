@@ -1,6 +1,7 @@
-#include "steppergroup.h"
+#include "dmsteppergroup.h"
 
-DMStepper* StepperGroup::get(String name){
+//Gets a motor by name
+DMStepper* DMStepperGroup::get(String name){
   for (std::vector<DMStepper*>::iterator it = _list.begin() ; it != _list.end(); ++it){
     if ((*it)->name == name)
       return (*it);
@@ -9,7 +10,7 @@ DMStepper* StepperGroup::get(String name){
 }
 
 //Update all the motors
-bool StepperGroup::update(){
+bool DMStepperGroup::update(){
   bool updated = false;
 
   for (std::vector<DMStepper*>::iterator it = _list.begin() ; it != _list.end(); ++it){
@@ -19,8 +20,8 @@ bool StepperGroup::update(){
   return updated;
 }
 
-//tells if at least one motor of the group is running
-bool StepperGroup::isRunning(){
+//Tells if at least one motor of the group is running
+bool DMStepperGroup::isRunning(){
   bool isRunning = false;
 
   for (std::vector<DMStepper*>::iterator it = _list.begin() ; it != _list.end(); ++it){

@@ -1,3 +1,2 @@
 *.gch
-a.out
-test.exe
+*.exe

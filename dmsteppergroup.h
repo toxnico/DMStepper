@@ -4,12 +4,12 @@
 #include <vector>
 #include "dmstepper.h"
 
-class StepperGroup{
+class DMStepperGroup{
 private:
 std::vector<DMStepper*> _list;
 
 public:
-  StepperGroup* add(DMStepper* motor){ _list.push_back(motor); return this; }
+  DMStepperGroup* add(DMStepper* motor){ _list.push_back(motor); return this; }
 
   int  size() { return _list.size(); }
 

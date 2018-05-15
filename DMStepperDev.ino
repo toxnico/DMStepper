@@ -1,17 +1,18 @@
 #include <dmtimer.h>
-#include <dmoscillator.h>
 #include "dmstepper.h"
-#include "steppergroup.h"
+#include "dmsteppergroup.h"
+#include "dmserialconsole.h"
 
 //DMTimer *t = NULL;
 //DMStepper *motor = NULL;
 
-StepperGroup *group = new StepperGroup();
+DMStepperGroup *group = new DMStepperGroup();
 
 int dirPin = 22;
 int stepPin = 23;
 int stepsTotal = 16000;
 char direction = 1;
+DMSerialConsole console;
 
 void setup(){
   delay(1000);
@@ -32,7 +33,7 @@ void loop(){
   //update the motor
   if(!group->isRunning()){
     direction *= -1;
-    
+
     group->get("left")->run(direction, 6000, stepsTotal);
     Serial.println("Go again!");
   }
