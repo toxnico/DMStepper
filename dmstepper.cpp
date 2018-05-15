@@ -4,26 +4,36 @@
 /**
 * Constructor
 */
-DMStepper::DMStepper(int dirPin, int stepPin){
-  _dirPin = dirPin;
-  _stepPin = stepPin;
+DMStepper::DMStepper(int dirPin, int stepPin)
+  :DMStepper("Stepper", dirPin, stepPin) {
+
+}
+
+DMStepper::DMStepper(String name, int dirPin, int stepPin){
+  this->name = name;
+  this->_dirPin = dirPin;
+  this->_stepPin = stepPin;
   pinMode(_dirPin, OUTPUT);
   pinMode(_stepPin, OUTPUT);
-  _timer = new DMTimer();
+  this->_timer = new DMTimer();
 }
 
 void DMStepper::run(signed char dir, unsigned long speed, unsigned long stepsToGo){
   if(isRunning())
     return;
 
-  _maxSpeedForThisMove = speed;
-  _stepsAchievedForThisMove = 0;
-  _totalStepsForThisMove = stepsToGo;
+  this->_maxSpeedForThisMove = speed;
+  this->_stepsAchievedForThisMove = 0;
+  this->_totalStepsForThisMove = stepsToGo;
+  this->_direction = invertDirection ? -dir : dir;
+  this->_isRunning = true;
 
-  _direction = dir;
-  digitalWrite(_dirPin, dir > 0 ? HIGH : LOW);
+  digitalWrite(_dirPin, this->_direction > 0 ? HIGH : LOW);
+}
 
-  _isRunning = true;
+void DMStepper::runTo(unsigned long position, unsigned long speed){
+  signed long offset = (signed long)position - (signed long)this->currentPosition;
+  run((offset < 0) ? -1 : 1, offset, speed);
 }
 
 bool DMStepper::update(){
@@ -35,8 +45,10 @@ bool DMStepper::update(){
   unsigned long speedHz = speedAtStep(_maxSpeedForThisMove, acceleration, _totalStepsForThisMove, _stepsAchievedForThisMove);
   //if(speedHz < veryMinSpeed)
   //  speedHz = veryMinSpeed;
+
   if(speedHz > veryMaxSpeed)
     speedHz = veryMaxSpeed;
+
   unsigned long periodUs = 1000000 / speedHz;
 
   if(!_timer->isTimeReached(micros(), periodUs))
@@ -47,7 +59,8 @@ bool DMStepper::update(){
   digitalWrite(_stepPin, LOW);
 
   _stepsAchievedForThisMove++;
-  //Serial.println(_stepsAchievedForThisMove, DEC);
+
+  //All steps done?
   if(_stepsAchievedForThisMove >= _totalStepsForThisMove)
     _isRunning = false;
 
