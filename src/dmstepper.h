@@ -30,7 +30,7 @@ public: //public members
 
   bool invertDirection = false;
 
-  unsigned long acceleration = 1; //steps/s^2
+  unsigned long acceleration = 300; //steps/s^2
 
   unsigned long veryMaxSpeed = 13000; //steps/s^2
   unsigned long veryMinSpeed = 300; //steps/s^2

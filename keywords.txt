@@ -1,0 +1,6 @@
+DMStepper	KEYWORD1
+dmstepper	KEYWORD1
+run	KEYWORD2
+update	KEYWORD2
+acceleration	KEYWORD2
+isRunning	KEYWORD2

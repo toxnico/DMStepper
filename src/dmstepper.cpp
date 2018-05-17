@@ -43,8 +43,6 @@ bool DMStepper::update(){
 
   //adjust the speed according to acceleration and current step position
   unsigned long speedHz = speedAtStep(_maxSpeedForThisMove, acceleration, _totalStepsForThisMove, _stepsAchievedForThisMove);
-  //if(speedHz < veryMinSpeed)
-  //  speedHz = veryMinSpeed;
 
   if(speedHz > veryMaxSpeed)
     speedHz = veryMaxSpeed;
