@@ -19,7 +19,7 @@ void setup(){
   //Acceleration of 35000 steps/s²
   motor.acceleration = 35000;
 
-  //Initiate a movement of 1600 steps at a max speed of 12000 steps/s,
+  //Initiate a movement of 16000 steps at a max speed of 12000 steps/s,
   //in direction 1 (direction can be inverted with motor->invertDirection = true)
   motor.run(1, 12000, 16000);
 
@@ -33,7 +33,7 @@ void loop(){
 
   //if we want to restart the motor after, we can do this:
   // if(!motor.isRunning()){
-  //   motor.run(1, 13000, 1600);
+  //   motor.run(1, 12000, 16000);
   // }
 
 }
