@@ -22,6 +22,12 @@ void DMStepper::run(signed char dir, unsigned long speed, unsigned long stepsToG
   if(isRunning())
     return;
 
+  if(stepsToGo == 0)
+  {
+    _isRunning = false;
+    return;
+  }
+
   this->_maxSpeedForThisMove = speed;
   this->_stepsAchievedForThisMove = 0;
   this->_totalStepsForThisMove = stepsToGo;
@@ -31,9 +37,9 @@ void DMStepper::run(signed char dir, unsigned long speed, unsigned long stepsToG
   digitalWrite(_dirPin, this->_direction > 0 ? HIGH : LOW);
 }
 
-void DMStepper::runTo(unsigned long position, unsigned long speed){
-  signed long offset = (signed long)position - (signed long)this->currentPosition;
-  run((offset < 0) ? -1 : 1, offset, speed);
+void DMStepper::runTo(signed long position, unsigned long speed){
+  signed long offset = position - (signed long)this->currentPosition;
+  run((offset < 0) ? -1 : 1, speed, abs(offset));
 }
 
 bool DMStepper::update(){
@@ -57,6 +63,7 @@ bool DMStepper::update(){
   digitalWrite(_stepPin, LOW);
 
   _stepsAchievedForThisMove++;
+  this->currentPosition+=this->_direction;
 
   //All steps done?
   if(_stepsAchievedForThisMove >= _totalStepsForThisMove)

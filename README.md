@@ -19,6 +19,13 @@ motor.acceleration = 15000;
 //Run the motor for 10000 steps, at a max speed of 3000 steps/s
 motor.run(1, 3000, 10000);
 
+//get or set the current position in steps
+motor.currentPosition;
+
+//Run the motor to the absolute position of 1640 steps, at 3000 steps/s max
+motor.runTo(1640, 3000);
+
+
 //And in the loop() function:
 motor.update();
 
